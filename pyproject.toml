@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "balkony"
+version = "0.1.0"
+description = "This repository offers tools for engineering problems, including capital cost estimation, process optimization, data analysis, and simulation models. It provides solutions to enhance efficiency and performance in engineering projects. Licensed for non-commercial use; commercial use requires authorization."
+authors = ["Gilvan Wanderley <gilvan.wanderley@outlook.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
