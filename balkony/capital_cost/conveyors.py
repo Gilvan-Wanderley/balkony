@@ -24,7 +24,7 @@ class ConveyorCost:
         """
         return self._equipment.cost(diameter, CEPCI)        
 
-    def bare_module(self, diameter: float, CEPCI: float = 397) -> float:
+    def bare_module(self, diameter: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             diameter (m) - Diameter of conveyors\n
             CEPCI (-) - Chemical plant cost indexes\n

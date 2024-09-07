@@ -37,7 +37,7 @@ class VaporizerCost:
         """
         return self._equipment.cost(volume, CEPCI)        
 
-    def bare_module(self, volume: float, pressure: float, CEPCI: float = 397) -> float:
+    def bare_module(self, volume: float, pressure: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             volume (m3) - Volume of vaporizer\n
             pressure (barg) - Operating pressure\n

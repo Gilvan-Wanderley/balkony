@@ -23,7 +23,7 @@ class MixerCost:
         """
         return self._equipment.cost(power, CEPCI)        
 
-    def bare_module(self, power: float, CEPCI: float = 397) -> float:
+    def bare_module(self, power: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             power (kW) - Power of mixer\n
             CEPCI (-) - Chemical plant cost indexes\n

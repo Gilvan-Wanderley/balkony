@@ -38,7 +38,7 @@ class FurnanceCost:
         """
         return self._equipment.cost(duty, CEPCI)        
 
-    def bare_module(self, duty: float, pressure: float, deltaTemp: float = 0, CEPCI: float = 397) -> float:
+    def bare_module(self, duty: float, pressure: float, deltaTemp: float = 0, CEPCI: float = 397) -> EquipmentCostResult:
         """
             duty (kW) - Duty of furnace\n
             pressure (barg) - Operating pressure\n

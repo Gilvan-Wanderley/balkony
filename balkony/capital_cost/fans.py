@@ -37,7 +37,7 @@ class FanCost:
         """
         return self._equipment.cost(flowrate, CEPCI)        
 
-    def bare_module(self, flowrate: float, rise_pressure: float, CEPCI: float = 397) -> float:
+    def bare_module(self, flowrate: float, rise_pressure: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             flowrate (m3/s) - Gas flowrate of fans\n
             rise pressure (kPa) - Rise pressure\n

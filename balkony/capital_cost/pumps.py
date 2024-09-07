@@ -38,7 +38,7 @@ class PumpCost:
         """
         return self._equipment.cost(power, CEPCI)        
 
-    def bare_module(self, power: float, pressure: float, CEPCI: float = 397) -> float:
+    def bare_module(self, power: float, pressure: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             power (kW) - power of pump\n
             pressure (barg) - Operating pressure\n

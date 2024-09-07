@@ -24,7 +24,7 @@ class CentrifugeCost:
         """
         return self._equipment.cost(area, CEPCI)        
 
-    def bare_module(self, area: float, CEPCI: float = 397) -> float:
+    def bare_module(self, area: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             area (m2) - Area of centrifuge\n
             CEPCI (-) - Chemical plant cost indexes\n

@@ -35,7 +35,7 @@ class TrayCost:
                                    CEPCI= CEPCI,
                                    value= cp0.value*num_trays)       
 
-    def bare_module(self, area: float, num_trays: int,CEPCI: float = 397) -> float:
+    def bare_module(self, area: float, num_trays: int,CEPCI: float = 397) -> EquipmentCostResult:
         """
             area (m2) - area of tray\n
             num_trays (-) - number of trays\n

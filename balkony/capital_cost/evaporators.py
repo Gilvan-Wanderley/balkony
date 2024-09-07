@@ -35,7 +35,7 @@ class EvaporatorCost:
         """
         return self._equipment.cost(area, CEPCI)        
 
-    def bare_module(self, area: float, pressure: float, CEPCI: float = 397) -> float:
+    def bare_module(self, area: float, pressure: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
             area (m2) - Area of evaporator\n
             pressure (barg) - Operating pressure\n

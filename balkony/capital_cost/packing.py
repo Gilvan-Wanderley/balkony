@@ -10,7 +10,7 @@ class PackingCost:
     class Type(Enum):
         Towers = { 'min_size': 0.03, 'max_size': 628.0, 'data': (2.4493, 0.9744, 0.0055), 'unit': 'm3'}
 
-    def __init__(self, type: Type = Type.Towers, material: Material = Material.CarbonSteel) -> None:
+    def __init__(self, type: Type = Type.Towers, material: Material = Material.Polyethylene) -> None:
         self._type = type
         self._material = material
         values = type.value
@@ -27,7 +27,7 @@ class PackingCost:
         """
         return self._equipment.cost(volume, CEPCI)      
 
-    def bare_module(self, volume: float,CEPCI: float = 397) -> float:
+    def bare_module(self, volume: float,CEPCI: float = 397) -> EquipmentCostResult:
         """
             volume (m3) - volume of packing\n
             CEPCI (-) - Chemical plant cost indexes\n
