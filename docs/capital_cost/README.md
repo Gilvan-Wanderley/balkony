@@ -1,8 +1,69 @@
 # Capital Cost Estimate Model
 
 ## How to Use
+How to use the Capital Cost library
+This example demonstrates how to calculate the cost of a centrifugal pump made of stainless steel using the PumpCost class from the Capital Cost library. The following steps explain how to use it properly.
 
-## Equipments
+* **Step 1**: Import the PumpCost Class <br>
+The first step is to import the PumpCost class from the balkony.capital_cost library:<br>
+```python
+from balkony.capital_cost import PumpCost
+```
+</br>
+
+* **Step 2**: Create an Instance of `PumpCost`<br>
+Next, you need to create an instance of the `PumpCost` class. In the example, the pump is specified as being of the centrifugal type and made of stainless steel. These parameters are passed as arguments to the class constructor:
+```python
+pump = PumpCost(PumpCost.Type.Centrifugal, 
+                PumpCost.Material.StainlessSteel)
+```
+</br>
+
+* **Step 3**: Calculate the Bare Module Cost<br>
+Now, you can calculate the bare module cost of the pump using the `bare_module` method. This method takes two parameters:<br>
+  * **Power**: A numeric value representing the pump's power, in this case, 350 kW (units should follow the library's expected format).<br>
+  * **Pressure**: A numeric value of operating pressure. In the example, the value 1.0 barg is used (units should follow the library's expected format).
+```python
+cost = pump.bare_module(350, 1)
+```
+</br>
+
+* **Step 4**: Display the Cost<br>
+Finally, the cost is stored in the `cost` variable, which has a `value` attribute. To display the calculated value, you can use the print function:
+
+```python
+print(f"Pump cost: {cost.value}")
+```
+
+## Equipments List
+The table below presents a list of all equipment and the respective types of equipment available for cost estimation.
+| **Equipment** | **Equipment Type** |
+|--------------------|--------------------------------------------|
+| Blenders           | Kneader, Ribbon, Rotary                    |
+| Centrifuges        | Auto batch separator, Centrifugal separator, Oscillating screen, Solid bowl w/o motor |
+| Compressors        | Centrifugal, axial, and reciprocating, Rotary |
+| Conveyors          | Apron, Belt, Pneumatic, Screw |
+| Crystallizers      | Batch |
+| Drives             | Gas turbine, Intern. comb. engine, Steam turbine, Electric—explosion-proof, Electric—totally enclosed, Electric—open/drip-proof |
+| Dryers             | Drum, Rotary, gas fired, Tray |
+| Dust Collectors    | Baghouse, Cyclone scrubbers, Electrostatic precipitator, Venturi scrubber |
+| Evaporators        | Forced circulation (pumped), Falling film, Agitated film (scraped wall), Short tube, Long tube |
+| Fans                | Centrifugal radial, Backward curve, Axial vane, Axial tube |
+| Filters             | Bent, Cartridge, Disc and drum, Gravity, Leaf, Pan, Plate and frame, Table, Tube |
+| Furnaces            | Reformer furnace, Pyrolysis furnace, Nonreactive fired heater |
+| Heat exchangers     | Scraped wall, Teflon tube, Bayonet, Floating head, Fixed tube, U-tube, Kettle reboiler, Double pipe, Multiple pipe, Flat plate, Spiral plate, Air cooler, Spiral tube |
+| Heaters             | Diphenyl heater, Molten salt heater, Hot water heater, Steam boiler |
+| Mixers              | Impeller, Propeller, Turbine |
+| Packing             | Loose (for towers) |
+| Process vessels     | Horizontal, Vertical |
+| Pumps               | Reciprocating, Positive displacement, Centrifugal |
+| Reactors            | Autoclave, Fermenter, Inoculum tank, Jacketed agitated, Jacketed nonagitated, Mixer/settler |
+| Screens             | DSM, Rotary, Stationary, Vibrating |
+| Tanks               | API—fixed roof, API—floating roof |
+| Towers              | Tray and packed |
+| Trays               | Sieve, Valve, Demisters |
+| Turbines            | Axial gas turbines, Radial gas/liquid expanders |
+| Vaporizers          | Internal coils/jackets, Jacketed vessels |
 
 ## Modelling Description
 ### Bare Module
@@ -34,7 +95,7 @@ The equation to calculate the bare module cost factor depends on the type of equ
 |**Heat Exchangers** <br> **Process Vessels** <br> **Tanks** <br> **Towers** <br> **Pumps** <br>|**• Pressure**: Yes  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = B_{1}+B_{2}\cdot F_{M}\cdot F_{P}$|
 |**Furnances** <br> **Heaters** <br> |**• Pressure**: Yes  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}\cdot F_P\cdot F_T$|
 |**Trays** <br> |**• Pressure**: No  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}\cdot N\cdot F_q$|
-|||
+
 
 Where: <br>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$F_{BM}^o\ and \ F_{BM}^{T,M}$ : modulo cost factor value default and type/material dependent, respectively .<br>
@@ -69,4 +130,16 @@ Where: <br>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$S$ (bar): maximun allowable stress of material (default value = 944).<br>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$E$: weld efficiency (default value = 0.9).<br>
 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$CA$ (m): corrosion allowance (default value = 0.00315).<br>
+
+### Inflation Effect on Equipment Cost 
+When relying on past records or published correlations for price information, it is essential to be able to update these costs to account inflation effect. This correction is performed using the equation below:
+
+$$
+C_{p}^{o} = C_{po}^{o} \left( \frac{CEPCI}{CEPCI_o} \right)
+$$
+
+where: <br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>CEPCI: Chemical Engineering Plant Cost Index.
+
+The subscripts "o" refers to the base time when cost is known (default value 397, referring to the year 2001).
 
