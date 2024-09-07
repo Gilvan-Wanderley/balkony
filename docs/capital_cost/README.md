@@ -5,26 +5,24 @@
 ## Equipments
 
 ## Modelling Description
-
-The bare module equipment cost (($C_{BM}$)) represents the sum of direct and indirect cost and can be estimate by the following equation:
+### Bare Module
+The bare module equipment cost ($C_{BM}$) represents the sum of direct and indirect cost and can be estimate by the following equation:
 
 $C_{BM}=C_{p}^{o}\cdot F_{BM}$
 
 Where: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;$C_{p}^{o}$: purchased cost for base conditions.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{BM}$: bare module cost factor.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$C_{p}^{o}$: purchased cost for base conditions.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$F_{BM}$: bare module cost factor.<br>
 
 The $C_{p}^{o}$ represents the equipment cost made of the most commom material and operating at near-ambient pressures. Data for the purchased cost of the equipmentes were fitted to the following equation:
 
 $log_{10}(C_{p}^{o})=K_{1} + K_{2}\cdot log_{10}(\Theta)+K_{3}\cdot log_{10}(\Theta)^{2}$
 
 Where: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;$\Theta$: capacity or size parameter for the equipment.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$K_{1}, K_{2}, K_{3}$: fitted parameters for the equipment<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$\Theta $: capacity or size parameter for the equipment.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$K_{1}, K_{2}, K_{3}$: fitted parameters for the equipment<br>
 
-<div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #fff9c4; color: #333;">
-<strong>Warning:</strong> he values for the fitted parameters are valid only within a specific range of the size parameter.
-</div><br>
+> <span>**$${\color{red}Warning}$$**:</span> The values for the fitted parameters are valid only within a specific range of the size parameter.
 
 The equation to calculate the bare module cost factor depends on the type of equipment, as show below:
 
@@ -39,12 +37,12 @@ The equation to calculate the bare module cost factor depends on the type of equ
 |||
 
 Where: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{BM}^o\ and \ F_{BM}^{T,M}$: modulo cost factor value default and type/material dependent, respectively .<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{P}$: pressure factor.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{M}$: material factor.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{T}$: superheat correction factor for steam boilers. $F_{T}=1$ for heaters and furnance. $F_{T}=1+0.00184\cdot ΔT -0.00000335\cdot ΔT$, where $ΔT$ is the amountof superheat in °C.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$N$: number of trays.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$F_{q}$: quantity factor. If $N≥20$, $F_{M}=1$ else $log_{10}(F_{M})=0.4771+0.08516\cdot log_{10}(N)-0.3473\cdot log_{10}(N)^2$.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$F_{BM}^o\ and \ F_{BM}^{T,M}$ : modulo cost factor value default and type/material dependent, respectively .<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$F_{P}$ : pressure factor.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$F_{M}$ : material factor.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span> $F_{T}$ : superheat correction factor for steam boilers. $F_{T}=1$ for heaters and furnance. $F_{T}=1+0.00184\cdot ΔT -0.00000335\cdot ΔT$, where $ΔT$ is the amountof superheat in °C.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$N$: number of trays.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp; $F_{q}$: quantity factor. If $N≥20$, $F_{M}=1$ else $log_{10}(F_{M})=0.4771+0.08516\cdot log_{10}(N)-0.3473\cdot log_{10}(N)^2$.<br>
 
 ### Pressure Factor
 The pressure factors, $F_P$, for the many process equipment is given by the following general form:
@@ -52,8 +50,8 @@ The pressure factors, $F_P$, for the many process equipment is given by the foll
 $log_{10}(F_p)=C_{1} + C_{2}\cdot log_{10}(P)+C_{3}\cdot log_{10}(P)^{2}$
 
 Where: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;$P$ (barg): capacity or size parameter for the equipment.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$C_{1}, C_{2}, C_{3}$: fitted parameters for the equipment.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$P$ (barg): capacity or size parameter for the equipment.<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$C_{1}, C_{2}, C_{3}$: fitted parameters for the equipment.<br>
 
 The pressure factor for horizontal and vertical process (pressurized) vessls of diameter $D$ meter and operating at pressure of $P$ barg is based in the ASME code for pressure vessel design.
 
@@ -67,8 +65,8 @@ F_{P,\text{vessel}} =
 $$
 
 Where: <br>
-&nbsp;&nbsp;&nbsp;&nbsp;$t_{min}$ (m): capacity or size parameter for the equipment (default value = 0.0063).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$S$ (bar): maximun allowable stress of material (default value = 944).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$E$: weld efficiency (default value = 0.9).<br>
-&nbsp;&nbsp;&nbsp;&nbsp;$CA$ (m): corrosion allowance (default value = 0.00315).<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$t_{min}$ (m): capacity or size parameter for the equipment (default value = 0.0063).<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$S$ (bar): maximun allowable stress of material (default value = 944).<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$E$: weld efficiency (default value = 0.9).<br>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>$CA$ (m): corrosion allowance (default value = 0.00315).<br>
 
