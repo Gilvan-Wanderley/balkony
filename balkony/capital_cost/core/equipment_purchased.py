@@ -12,7 +12,8 @@ class EquipmentPurchased():
     
     def cost(self, size: float, CEPCI: float = 397) -> EquipmentCostResult:
         K1, K2, K3 = self.properties.data
-        cp0 = 10**(K1 + K2*math.log(size,10) + K3*(math.log(size,10)**2))
+        log_size = math.log(size,10)
+        cp0 = 10**(K1 + K2*log_size + K3*(log_size**2))
         return EquipmentCostResult(status= {'size': self.check_range(size)},
                                    CEPCI= CEPCI,
                                    value= (CEPCI/397.0)*cp0)
