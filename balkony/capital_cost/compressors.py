@@ -14,6 +14,8 @@ class CompressorCost:
         Rotary = { 'min_size': 18.0, 'max_size': 950.0, 'data': (5.0355, -1.8002, 0.8253), 'unit':'kW' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
                                                                  unit=type.value['unit'],

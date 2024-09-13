@@ -15,6 +15,8 @@ class TrayCost:
         Demisters = { 'min_size': 0.7, 'max_size': 10.5, 'data': (3.2353, 0.4838, 0.3434), 'unit': 'm2'}
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
                                                                  unit=type.value['unit'],

@@ -40,6 +40,8 @@ class HeatExchangerCost:
         SpiralPlate = { 'min_size': 1.0, 'max_size': 100.0, 'data': (4.6561, -0.2947, 0.2207), 'unit': 'm2', 'B1':0.96, 'B2': 1.21 }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel, tube_only: bool = True) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._pressure = HeatExchangerPressure(type.name, tube_only)
         self._equipment= EquipmentPurchased(EquipmentProperties(data=type.value['data'],

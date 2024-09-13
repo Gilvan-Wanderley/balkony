@@ -16,6 +16,8 @@ class FanCost:
         AxialTube = { 'min_size': 1.0, 'max_size': 100.0, 'data': (3.0414, -0.3375, 0.4722), 'unit':'m3/s' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._pressure: FanPressure = FanPressure(type.name)
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],

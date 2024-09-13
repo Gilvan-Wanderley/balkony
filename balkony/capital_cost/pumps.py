@@ -16,7 +16,9 @@ class PumpCost:
         PositiveDisplacement = { 'min_size': 1.0, 'max_size': 100.0, 'data': (3.4771, 0.1350, 0.1438), 'unit': 'kW', 'B1':1.89, 'B2': 1.35 }
         Centrifugal = { 'min_size': 1.0, 'max_size': 300.0, 'data': (3.3892, 0.0536, 0.1538), 'unit': 'kW', 'B1':1.89, 'B2': 1.35 }
 
-    def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:    
+    def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._pressure = PumpPressure(type.name)
         self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=type.value['data'],

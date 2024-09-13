@@ -11,6 +11,8 @@ class PackingCost:
         Tower = { 'min_size': 0.03, 'max_size': 628.0, 'data': (2.4493, 0.9744, 0.0055), 'unit': 'm3'}
 
     def __init__(self, type: Type = Type.Tower, material: Material = Material.Polyethylene) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
                                                                  unit=type.value['unit'],

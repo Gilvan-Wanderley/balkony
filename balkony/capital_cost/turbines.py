@@ -13,6 +13,8 @@ class TurbineCost:
         RadialLiquid = { 'min_size': 100.0, 'max_size': 1500.0, 'data': (2.2476, 1.4965, -0.1618), 'unit':'kW'}
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
                                                                  unit=type.value['unit'],

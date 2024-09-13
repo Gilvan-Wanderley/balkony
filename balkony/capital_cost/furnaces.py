@@ -14,6 +14,8 @@ class FurnanceCost:
         NonreactiveFiredHeater = { 'min_size': 1000.0, 'max_size': 100000.0, 'data': (7.3488, -1.1666, 0.2028), 'unit':'kW' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._pressure: FurnacePressure = FurnacePressure(type.name)     
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],

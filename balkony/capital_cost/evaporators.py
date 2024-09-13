@@ -18,6 +18,8 @@ class EvaporatorCost:
         LongTube = { 'min_size': 100.0, 'max_size': 10000.0, 'data': (4.6420, 0.3698, 0.0025), 'unit':'m2' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
+        if type.name not in material.value.keys():
+            raise Exception(f"Invalid material ({material.name}) for this equipment type ({type.name})")
         self._type, self._material = type, material
         self._pressure = EvaporatorPressure()
         self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
