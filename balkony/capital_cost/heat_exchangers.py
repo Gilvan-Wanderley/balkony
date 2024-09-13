@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
+from .pressure import HeatExchangerPressure
 
 class HeatExchangerCost:
     class Material(Enum):
@@ -39,38 +40,12 @@ class HeatExchangerCost:
         SpiralPlate = { 'min_size': 1.0, 'max_size': 100.0, 'data': (4.6561, -0.2947, 0.2207), 'unit': 'm2', 'B1':0.96, 'B2': 1.21 }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel, tube_only: bool = True) -> None:
-        if type.name in ['ScrapedWall', 'DoublePipe', 'MultiplePipe']:            
-            self._pressure = PressureFactor([((None, 40), (0.0, 0.0, 0.0)), 
-                                             ((40, 100), (0.6072, -0.9120, 0.3327)),
-                                             ((100, 300), (13.1467, -12.6574, 3.0705))])
-        elif type.name == 'TeflonTube':
-            self._pressure = PressureFactor([((None, 15), (0.0, 0.0, 0.0))])
-        elif type.name in ['FlatPlate', 'SpiralPlate']:
-            self._pressure = PressureFactor([((None, 19), (0.0, 0.0, 0.0))])
-        elif type.name == 'AirCooler':
-            self._pressure = PressureFactor([((None, 10), (0.0, 0.0, 0.0)),
-                                             ((10, 100), (-0.1250, 0.15361, -0.02861))])
-        elif type.name == 'SpiralTube':
-            if tube_only:
-                self._pressure = PressureFactor([((None, 150), (0.0, 0.0, 0.0)),
-                                                ((150, 400), (-0.2115, 0.09717, 0.0))])
-            else:
-                self._pressure = PressureFactor([((None, 150), (0.0, 0.0, 0.0)),
-                                                ((150, 400), (-0.4045, 0.1859, 0.0))])
-        else:
-            if tube_only:
-                self._pressure = PressureFactor([((None, 5), (0.0, 0.0, 0.0)),
-                                                ((5, 140), (-0.00164, -0.00627, 0.0123))])
-            else:
-                self._pressure = PressureFactor([((None, 5), (0.0, 0.0, 0.0)),
-                                                ((5, 140), (0.03881, -0.11272, 0.08183))])    
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material = type, material
+        self._pressure = HeatExchangerPressure(type.name, tube_only)
+        self._equipment= EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                unit=type.value['unit'],
+                                                                min_size=type.value['min_size'],
+                                                                max_size=type.value['max_size']))
 
     def purchased(self, area: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -91,8 +66,7 @@ class HeatExchangerCost:
         Fp = self._pressure.factor(pressure)
         B1 = self._type.value['B1']
         B2 = self._type.value['B1']
-        FBM = B1 + B2*Fm*Fp
         cp0 = self._equipment.cost(area, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM)
+                                   value= cp0.value*(B1 + B2*Fm*Fp.value))

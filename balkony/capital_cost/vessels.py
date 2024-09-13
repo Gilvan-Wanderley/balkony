@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
 
 class VesselCost:
     @dataclass(frozen=True)
@@ -34,14 +34,11 @@ class VesselCost:
         Vertical = { 'min_size': 0.3, 'max_size': 520.0, 'data': (3.4974, 0.4485, 0.1074), 'unit': 'm3', 'B1': 2.25, 'B2': 1.82 }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel, struct: Structure = Structure()) -> None:
-        self._type = type
-        self._material = material
-        self._structure = struct
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material, self._structure = type, material, struct
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, volume: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -63,8 +60,7 @@ class VesselCost:
         Fm = self._material.value
         B1 = self._type.value['B1']
         B2 = self._type.value['B1']
-        FBM = B1 + B2*Fm*Fp
         cp0 = self._equipment.cost(volume, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= cp0.status,
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM)
+                                   value= cp0.value*(B1 + B2*Fm*Fp))

@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
+from .pressure import HeaterPressure
 
 class HeaterCost:
     class Type(Enum):
@@ -8,19 +9,13 @@ class HeaterCost:
         HotWater = { 'min_size': 650.0, 'max_size': 10750.0, 'data': (2.0829, 0.9074, -0.0243), 'unit': 'kW', 'Fbare': 2.19}
         SteamBoiler = { 'min_size': 1200.0, 'max_size': 9400.0, 'data': (6.9617, -1.4800, 0.3161), 'unit': 'kW', 'Fbare': 2.19}
 
-    def __init__(self, type: Type) -> None:
-        if type.name == 'SteamBoiler':
-            self._pressure = PressureFactor([((None, 20), (0.0, 0.0, 0.0)), 
-                                             ((20, 40), (0.594072, -4.23476, 1.722404))])
-        else:
-            self._pressure = PressureFactor([((None, 2), (0.0, 0.0, 0.0)), 
-                                             ((2, 200), (-0.01633, 0.056875, -0.00876))])         
+    def __init__(self, type: Type) -> None:       
         self._type = type
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._pressure = HeaterPressure(type.name)
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, duty: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -42,6 +37,6 @@ class HeaterCost:
         Ft = 1 + 0.00184*deltaTemp - 0.00000335*(deltaTemp**2)
         Fp = self._pressure.factor(pressure)
         cp0 = self._equipment.cost(duty, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM*Fp*Ft)
+                                   value= cp0.value*FBM*Fp.value*Ft)

@@ -15,13 +15,11 @@ class TrayCost:
         Demisters = { 'min_size': 0.7, 'max_size': 10.5, 'data': (3.2353, 0.4838, 0.3434), 'unit': 'm2'}
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material = type, material
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, area: float, num_trays: int,  CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -31,7 +29,7 @@ class TrayCost:
             return ($) - Purchased cost of equipment
         """
         cp0 = self._equipment.cost(area, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= cp0.status,
                                    CEPCI= CEPCI,
                                    value= cp0.value*num_trays)       
 
@@ -48,6 +46,6 @@ class TrayCost:
             Fq = 0.4771 + 0.08516*(math.log10(num_trays)) - 0.3473*(math.log10(num_trays)**2)
         FBM = self._material.value[self._type.name]
         cp0 = self._equipment.cost(area, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= cp0.status,
                                    CEPCI= CEPCI,
                                    value= cp0.value*FBM*Fq*num_trays)

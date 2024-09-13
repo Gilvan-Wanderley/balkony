@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
+from .pressure import TankPressure
 
 class TankCost:
     class Material(Enum):
@@ -16,15 +17,12 @@ class TankCost:
         APIFloatingRoof = { 'min_size': 1000.0, 'max_size': 40000.0, 'data': (5.9567, -0.7585, 0.1749), 'unit': 'm3', 'B1': 2.25, 'B2': 1.82 }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        self._pressure = PressureFactor([((None, 10), (0.0, 0.0, 0.0)), 
-                                         ((10, 150), (0.1578, -0.2992, 0.1413))])
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material= type, material
+        self._pressure = TankPressure()
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, volume: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -45,8 +43,7 @@ class TankCost:
         Fp = self._pressure.factor(pressure)
         B1 = self._type.value['B1']
         B2 = self._type.value['B1']
-        FBM = B1 + B2*Fm*Fp
         cp0 = self._equipment.cost(volume, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM)
+                                   value= cp0.value*(B1 + B2*Fm*Fp.value))

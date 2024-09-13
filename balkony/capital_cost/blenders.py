@@ -9,11 +9,10 @@ class BlenderCost:
 
     def __init__(self, type: Type) -> None:
         self._type = type
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, volume: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -31,6 +30,6 @@ class BlenderCost:
         """
         FBM= self._type.value['Fbare']
         cp0 = self._equipment.cost(volume, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= cp0.status,
                                    CEPCI= CEPCI,
                                    value= cp0.value*FBM)

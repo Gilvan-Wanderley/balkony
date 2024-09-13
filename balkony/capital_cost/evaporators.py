@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
+from .pressure import EvaporatorPressure
 
 class EvaporatorCost:
     class Material(Enum):
@@ -17,15 +18,12 @@ class EvaporatorCost:
         LongTube = { 'min_size': 100.0, 'max_size': 10000.0, 'data': (4.6420, 0.3698, 0.0025), 'unit':'m2' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        self._pressure = PressureFactor([((None, 10), (0.0, 0.0, 0.0)), 
-                                         ((10, 150), (0.1578, -0.2992, 0.1413))])
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material = type, material
+        self._pressure = EvaporatorPressure()
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, area: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -45,6 +43,6 @@ class EvaporatorCost:
         FBM = self._material.value[self._type.name]
         Fp = self._pressure.factor(pressure)
         cp0 = self._equipment.cost(area, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM*Fp)
+                                   value= cp0.value*FBM*Fp.value)

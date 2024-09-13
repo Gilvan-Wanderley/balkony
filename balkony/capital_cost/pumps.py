@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
+from .pressure import PumpPressure
 
 class PumpCost:
     class Material(Enum):
@@ -15,20 +16,13 @@ class PumpCost:
         PositiveDisplacement = { 'min_size': 1.0, 'max_size': 100.0, 'data': (3.4771, 0.1350, 0.1438), 'unit': 'kW', 'B1':1.89, 'B2': 1.35 }
         Centrifugal = { 'min_size': 1.0, 'max_size': 300.0, 'data': (3.3892, 0.0536, 0.1538), 'unit': 'kW', 'B1':1.89, 'B2': 1.35 }
 
-    def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        if type.name == 'Centrifugal':            
-            self._pressure = PressureFactor([((None, 10), (0.0, 0.0, 0.0)), 
-                                             ((10, 100), (0.1347, -0.2368, 0.1021))])
-        else:
-            self._pressure = PressureFactor([((None, 10), (0.0, 0.0, 0.0)), 
-                                             ((10, 100), (-0.3935, 0.3957, -0.00226))])      
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+    def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:    
+        self._type, self._material = type, material
+        self._pressure = PumpPressure(type.name)
+        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                                     unit=type.value['unit'],
+                                                                                     min_size=type.value['min_size'],
+                                                                                     max_size=type.value['max_size']))
 
     def purchased(self, power: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -49,8 +43,7 @@ class PumpCost:
         Fp = self._pressure.factor(pressure)
         B1 = self._type.value['B1']
         B2 = self._type.value['B1']
-        FBM = B1 + B2*Fm*Fp
         cp0 = self._equipment.cost(power, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM)
+                                   value= cp0.value*(B1 + B2*Fm*Fp.value))

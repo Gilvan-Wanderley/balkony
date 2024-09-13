@@ -1,5 +1,6 @@
 from enum import Enum
-from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult, PressureFactor
+from .pressure import FanPressure
+from .core import EquipmentProperties, EquipmentPurchased, EquipmentCostResult
 
 class FanCost:
     class Material(Enum):
@@ -15,19 +16,12 @@ class FanCost:
         AxialTube = { 'min_size': 1.0, 'max_size': 100.0, 'data': (3.0414, -0.3375, 0.4722), 'unit':'m3/s' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        if type.name == 'CentrifugalRadial' or type.name == 'BackwardCurve':
-            self._pressure = PressureFactor([((None, 1), (0.0, 0.0, 0.0)), 
-                                             ((1, 16), (0.0, 0.20899, -0.0328))])
-        else:
-            self._pressure = PressureFactor([((None, 1), (0.0, 0.0, 0.0)), 
-                                             ((1, 4), (0.0, 0.20899, -0.0328))])
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material = type, material
+        self._pressure: FanPressure = FanPressure(type.name)
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, flowrate: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -47,6 +41,6 @@ class FanCost:
         FBM = self._material.value[self._type.name]
         Fp = self._pressure.factor(rise_pressure)
         cp0 = self._equipment.cost(flowrate, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= {'size': cp0.status['size'], 'pressure': Fp.status},
                                    CEPCI= CEPCI,
-                                   value= cp0.value*FBM*Fp)
+                                   value= cp0.value*FBM*Fp.value)

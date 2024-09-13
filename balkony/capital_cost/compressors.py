@@ -14,13 +14,11 @@ class CompressorCost:
         Rotary = { 'min_size': 18.0, 'max_size': 950.0, 'data': (5.0355, -1.8002, 0.8253), 'unit':'kW' }
 
     def __init__(self, type: Type, material: Material = Material.CarbonSteel) -> None:
-        self._type = type
-        self._material = material
-        values = type.value
-        self._equipment: EquipmentPurchased = EquipmentPurchased(EquipmentProperties(data=values['data'],
-                                                                                     unit=values['unit'],
-                                                                                     min_size=values['min_size'],
-                                                                                     max_size=values['max_size']))
+        self._type, self._material = type, material
+        self._equipment = EquipmentPurchased(EquipmentProperties(data=type.value['data'],
+                                                                 unit=type.value['unit'],
+                                                                 min_size=type.value['min_size'],
+                                                                 max_size=type.value['max_size']))
 
     def purchased(self, power: float, CEPCI: float = 397) -> EquipmentCostResult:
         """
@@ -38,6 +36,6 @@ class CompressorCost:
         """
         FBM = self._material.value[self._type.name]
         cp0 = self._equipment.cost(power, CEPCI)
-        return EquipmentCostResult(range_status= cp0.range_status,
+        return EquipmentCostResult(status= cp0.status,
                                    CEPCI= CEPCI,
                                    value= cp0.value*FBM)
