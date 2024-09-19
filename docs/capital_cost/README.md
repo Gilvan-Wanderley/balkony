@@ -89,8 +89,8 @@ The equation to calculate the bare module cost factor depends on the type of equ
 
 | **Equipment**| **Sensibility**| **Equation** |
 |--------------|----------------|--------------|
-|**Blenders** <br> **Centrifuges** <br> **Conveyors** <br> **Crystallizers** <br> **Dryers** <br> **Dust Collectors** <br> **Filters** <br> **Mixers** <br> **Reactors** <br> **Screens** <br> | **• Pressure**: No  <br> **• Material**: No  <br> **• Type**: No | $F_{BM} = F_{BM}^o$
-|**Compressors** <br> **Drives** <br> **Turbines** <br> **Packing** <br>|**• Pressure**: No  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}$|
+|**Blenders** <br> **Centrifuges** <br> **Conveyors** <br> **Crystallizers** <br> **Drives** <br> **Dryers** <br> **Dust Collectors** <br> **Filters** <br> **Mixers** <br> **Reactors** <br> **Screens** <br> | **• Pressure**: No  <br> **• Material**: No  <br> **• Type**: Yes | $F_{BM} = F_{BM}^o$
+|**Compressors** <br> **Turbines** <br> **Packing** <br>|**• Pressure**: No  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}$|
 |**Vaporizers** <br> **Evaporators** <br> **Fans** <br> |**• Pressure**: Yes  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}\cdot F_{P}$|
 |**Heat Exchangers** <br> **Process Vessels** <br> **Tanks** <br> **Towers** <br> **Pumps** <br>|**• Pressure**: Yes  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = B_{1}+B_{2}\cdot F_{M}\cdot F_{P}$|
 |**Furnances** <br> **Heaters** <br> |**• Pressure**: Yes  <br> **• Material**: Yes  <br> **• Type**: Yes| $F_{BM} = F_{BM}^{T,M}\cdot F_P\cdot F_T$|
