@@ -7,3 +7,6 @@ def calculate_purchased(K1, K2, K3, size, CEPCI = 397):
 
 def calculate_bare_module_simple(purchased, bare_module):
     return purchased*bare_module
+
+def calculate_bare_module_pressure(purchased, bare_module, pressure_fact):
+    return purchased*bare_module*pressure_fact
